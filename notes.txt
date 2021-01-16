@@ -1,0 +1,537 @@
+Initial Impressions
+___________________________________________
+Looks like we are going to be using event listeners to do some cool stuff 
+didn't really glean too much but it looks like we are detecting for changes on the components 
+
+___________________________________________
+React Events Intro 
+___________________________________________
+Events and React State 
+
+We will learn how to attach event handlers to components in React 
+all the regular events we used in the DOM and we will talk about how to do this in React 
+
+Define React State
+
+Initialize and change state with useState
+Write Event handlers to change state 
+
+
+DOM vs React 
+
+if we step away 
+
+there are different ways to add them 
+
+one way is select an element is addEventListener 
+another way is add in an in line event handler which is something we should not do in vanilla JS 
+
+with react we add inline event handlers in our JSX but we add ina  couple of changes 
+
+React events are camelCase rather than lowecase 
+With JSX you pass a function as event handler rather than a string 
+
+Example 
+
+Vanilla:
+
+<button onclick="activateLasers()>
+Activate Lasers
+</button>
+
+React:
+
+<button onClick={activateLasers}>
+Activate Lasers
+</button>
+
+we pass in the function into the curly braces 
+we can define an arrow function even in line inside of the curly braces 
+
+so we can define a function and pass in the reference to the function 
+
+so it will only activate once we click it 
+
+very first event :) 
+
+import React from 'react'
+
+const Clicker = () => {
+    const fireLasers = () => {
+        console.log('THE LASERS HAVE BEEN FIRED!')
+        console.log('ZAP! PEW PEW PEW!!!')
+    }
+    return (<button onClick={fireLasers} >Click Me!</button>)
+}
+
+export default Clicker;
+
+we have a bunch of attributes for events that we can go from 
+
+
+___________________________________________
+Other Event Types
+___________________________________________
+
+We have access to all of the standard events that we would have without react, but camelCased 
+
+mouse events , form events 
+
+in the react docs we can go to synthetic events 
+
+react wraps it in something called a synthetic event and it is more react friendly 
+contains info about methods and events 
+
+we have supported events 
+
+on copy on cut on paste
+
+keydown key up 
+
+ton of mouse events 
+
+lots of stuff 
+
+return (<button onMouseOver={fireLasers} >Click Me!</button>)
+
+onScroll 
+
+so we have a bunch of events that we can listen for and there is a ton of tutorials out there for accomplishing certain tasks 
+
+
+
+___________________________________________
+Synthetic Event Objects
+___________________________________________
+In vanilla js when we define an event listener , we pass in an event object even if we dont use it 
+
+we can capture event objects as a parameter inside of the functions we are referencing, in this case fireLaser 
+
+SyntheticBaseEvent {_reactName: "onMouseOver", _targetInst: null, type: "mouseover", nativeEvent: MouseEvent, target: button, …}
+
+this is what we get back
+unexpanded
+
+sometimes we need this event object to get more information about the stuff that is happening
+
+but its not the regular one, it is wrapped in a synthetic object (the goal of these is to events work the same across all browsers )
+
+React does soemthing called event pooling, everytime it does a similar action it nullifies the fields 
+
+so the chrome console shows us the current event type, console.log will still show the data from the objects at the top level but if we open it up
+we can see that chrome is showing the null value in the console.log after it runs the first instance of that object because it shows the current value 
+
+you still have access to all of the data, but if you do print it out the data is going to be set to null after it does run 
+
+if you want to see the regular version without the react event wrapper you can call the e.nativeEvent object 
+
+we can add a parameter to any of our event callbacks and then we can access the event object 
+
+
+___________________________________________
+Events with Args
+___________________________________________
+How can we pass arguments to our event listeners?
+
+we might need to know something about how something is clicked 
+
+<button onClick={() => printColor('Red')}>Red</button>
+
+the react way of passing in an argument is to basically create a new function that is referencing the actual function we want to call with arguments but without invoking it 
+
+this makes it so that we are able to call that function when we need it with that particular argument 
+
+
+const ButtonGroup = () => {
+    const printColor = (color) => {
+        console.log(`You clicked ${color.toUpperCase()}`)
+    }
+    return (
+        <div>
+            <button onClick={() => printColor('Red')}>Red</button>
+            <button onClick={() => printColor('Yellow')}>Yellow</button>
+            <button onClick={() => printColor('Green')}>Green</button>
+        </div>
+    )
+
+}
+
+this is a very common pattern and often instead of having red yellow and green we would pass in an id 
+like if we wanted to have delete buttons on a shopping cart 
+
+
+___________________________________________
+Intro to State
+___________________________________________
+
+React State 
+
+It is one of a couple of core ideas that we will be seeing all over the place 
+
+-components
+-building block of React 
+-combines logic and presentation 
+
+Props
+-data passed to a components
+-immutable component cannot change its own props 
+
+State
+-data specific to a component 
+-can change 
+
+like if we wanted to have a timer we would need state 
+
+What common things belon in state?
+
+-Hiding or showing some data 
+(toggling)
+-Fetching data from an API (starts empty and changes to be populated)
+
+-Themes,colors,or styles that change based on event 
+
+When working with some information ask yourself if you will need state 
+
+State and Lifecycle 
+
+The history of react 
+
+we can now use functional components and add in state 
+
+in the past the only way to use state you had to covert to class components 
+we will be using state hooks 
+
+we will be using state in functions 
+
+the syntax is actually different than class based react 
+
+Hooks docs are what we would want to look at 
+
+There are different hooks and the one we are going to be looking at right now is State Hooks 
+
+Everyone wants to know hooks , it is what everyone is excited about 
+
+
+___________________________________________
+useState Intro
+___________________________________________
+State
+we want to have a counter button that increases the Number
+
+props does not work since we cannnot change the prop 
+
+in React state is created using useState 
+
+useState returns an array with two values 
+
+-what the piece of state is 
+-a function to change it 
+
+so we get this pair of items back
+
+const [mood,setMood] = useState("happy")
+
+we import useState from react 
+
+useState takes one argument - whatever youd like the initial state to be 
+You must call useState in the component , state belongs and is associated with a particular component 
+
+you cannot call useState in loops or conditionals 
+
+there will be a seperate video of what is actually happening and why we cannot use it in loops or conditionals 
+
+useState is initializing state 
+
+we will do this using our setMood function 
+
+whatever we pass to this function will be the new value of mood 
+
+import React, { useState } from 'react';
+we can import it like that but we can also use it like this 
+
+React.useState like a method call 
+
+useState always returns an array with 2 items, so it is pretty common practice to destructure that array 
+
+so far we have the following 
+
+const Counter = (props) => {
+    const [count, setCount] = useState(99)
+    return (
+        <>
+            <h1>Count is: {count}</h1>
+            <button>Add</button>
+        </>
+    )
+}
+
+and we can see that the value that we pass in to useState is initializing count so when we check what is rendered we see 99
+
+const Counter = (props) => {
+    const [count, setCount] = useState(99)
+    return (
+        <>
+            <h1>Count is: {count}</h1>
+            <button onClick={() => setCount(100)}>Add</button>
+        </>
+    )
+}
+
+
+so we get this and right now we use that inline arrow function  to get the counter to be 100 so this is a start but not exactly the functionality that we are trying to achieve 
+
+now if we do want to be able to have a counter then we do the following 
+
+const Counter = (props) => {
+    const [count, setCount] = useState(99)
+    return (
+        <>
+            <h1>Count is: {count}</h1>
+            <button onClick={() => setCount(count + 1)}>Add</button>
+        </>
+    )
+}
+
+
+take that count value and just add 1 to it 
+
+when state changes in a component, that component is rerendered 
+so we can see the changes 
+
+which is why we can see the new values showing up 
+
+we added in a subtract button 
+
+there is a ton going on behind the scenes 
+
+counter is a function 
+anytime the state changes inside of the component it renders the whole component again 
+how does react not reset the number back to 99?  
+___________________________________________
+Number Game Demo
+___________________________________________
+We will start with a number game for a bigger component exercise with state 
+
+we are going to be trying to get a target number and you might think that this would work 
+
+const NumberGame = (props) => {
+    const genRandom = () => Math.floor(Math.random() * 10) + 1;
+    const [guess, setGuess] = useState(genRandom);
+    const target = genRandom()
+    return (
+        <div>
+            <h1>Target Num: {target} </h1>
+            <h1>Your Guess: {guess}</h1>
+            <button onClick={() => setGuess(genRandom)}>Generate Number</button>
+        </div>
+    )
+}
+
+but the target changes each time the component senses a state change as well 
+
+when a piece of state changes in the component the whole thing is rerendered so that results in a new random number for the target 
+
+and that is not ideal if we are trying to hit that target 
+
+but thanks to use state we can have persistance between those states 
+
+as long as we used useState and got our array the first value of that array will persist 
+
+so we are getting rerenders and we are able to keep the persistent target value 
+
+const NumberGame = (props) => {
+    const genRandom = () => Math.floor(Math.random() * 10) + 1;
+    const [guess, setGuess] = useState(genRandom);
+    const [target, setTarget] = useState(genRandom());
+    return (
+        <div>
+            <h1>Target Num: {target} </h1>
+            <h1>Your Guess: {guess}</h1>
+            <button onClick={() => setGuess(genRandom)}>Generate Number</button>
+        </div>
+    )
+}
+
+we will show your guess in red if it is not matching the target 
+
+we want to set it to green once youve won, 
+
+we can usea  ternary operator 
+
+            <h1 style={{ color: target === guess ? 'green' : 'red' }}>Your Guess: {guess}</h1>
+
+            and that makes it so that when we get the target value and the guess to be the same then it will turn the guess green 
+
+this is passing in a style object but we can also set a couple of classes one for winner and one for loser 
+
+based off of target 
+
+we could do this 
+
+            <h1 className={target === guess ? 'winner' : 'loser'}>Your Guess: {guess}</h1>
+
+we can also make a variable to keep track of the win condition so we would end up with something like this 
+
+const NumberGame = (props) => {
+    const genRandom = () => Math.floor(Math.random() * 10) + 1;
+    const [guess, setGuess] = useState(genRandom);
+    const [target, setTarget] = useState(genRandom());
+    const isWinner = target === guess;
+    return (
+        <div>
+            <h1>Target Num: {target} </h1>
+            <h1 className={isWinner ? 'winner' : 'loser'}>Your Guess: {guess}</h1>
+            <button onClick={() => setGuess(genRandom)}>Generate Number</button>
+        </div >
+    )
+}
+
+
+so we add in a little style and now we want to make it so that the button is hidden once you win the game 
+
+we can write a ternary operator for the button 
+
+{isWinner ? null : <button onClick={() => setGuess(genRandom)}>Generate Number</button>}
+
+this is kind of ugly but basically , if they havent won yet the button will show 
+
+there is a shorter way 
+
+if we want to hide something and not replace it with anything else 
+
+we could write it like 
+
+{!isWinner && <button aka actual button>}
+___________________________________________
+Number Game Demo 2
+___________________________________________
+
+    const restart = () => {
+        setTarget(genRandom())
+        setGuess(0)
+    }
+
+    we add in this with a new game button so that we can start over 
+
+    there are somewhat dynamic styles and we are showing and hiding generate num 
+
+    one thing is that, when we render 1 number game it gets its own state 
+
+    we can have 4 number games and everything is self contained 
+
+    different guesses 
+
+    and they will all be on their own, the state is only for that particular number game component 
+
+lets keep track of how many times we had to click the button 
+so we have to track the number of guesses 
+
+
+right now we have our arrow function 
+
+const NumberGame = (props) => {
+    const genRandom = () => Math.floor(Math.random() * 10) + 1;
+    const restart = () => {
+        setTarget(genRandom())
+        setGuess(0)
+    }
+    const [guess, setGuess] = useState(genRandom);
+    const [target, setTarget] = useState(genRandom());
+    const [guessCount, setGuessCount] = useState(0)
+    const isWinner = target === guess;
+
+    return (
+        <div className="NumberGame">
+            <h1>Target Num: {target} </h1>
+            <h1 className={isWinner ? 'winner' : 'loser'}>Your Guess: {guess}</h1>
+            <h4>Guess #{guessCount}</h4>
+            {!isWinner && <button onClick={() => setGuess(genRandom)}>Generate Number</button>}
+            <button onClick={restart}>New Game</button>
+        </div >
+    )
+}
+
+
+we are going to have to make some changes to the arrow function for our onClick 
+
+generally we want to keep our inline arrow functions to 1 expression 
+
+so instead we are going to make a new function to call in the onCLick 
+
+const NumberGame = (props) => {
+    const genRandom = () => Math.floor(Math.random() * 10) + 1;
+    const restart = () => {
+        setTarget(genRandom())
+        setGuess(0)
+    }
+    const makeGuess = () => {
+        setGuess(genRandom())
+        setGuessCount(guessCount + 1)
+    }
+    const [guess, setGuess] = useState(genRandom);
+    const [target, setTarget] = useState(genRandom());
+    const [guessCount, setGuessCount] = useState(0)
+    const isWinner = target === guess;
+
+    return (
+        <div className="NumberGame">
+            <h1>Target Num: {target} </h1>
+            <h1 className={isWinner ? 'winner' : 'loser'}>Your Guess: {guess}</h1>
+            <h4>Guess #{guessCount}</h4>
+            {!isWinner && <button onClick={makeGuess}>Generate Number</button>}
+            <button onClick={restart}>New Game</button>
+        </div >
+    )
+}
+
+and we update our logic to be this instead
+
+so now that works
+
+___________________________________________
+Props vs State
+___________________________________________
+
+State vs Props 
+
+You pass props in , you can access them in a functional component 
+
+in State we use the useState hooks 
+
+state can change within a given component
+props can not be altered by the component
+
+when you should use state vs when you should use props 
+
+how to break things down, intro to that 
+
+If the data ever needs to change, it needs to be in state! 
+it needs to be in state somewhere 
+but they might be passed down as props in somewhere else 
+
+this is the hardest part of react, its about getting into the react mindset 
+
+if we were building a game board component 
+
+we want it to be a component called gamebpard
+
+gameboard will have a scpore props or state?
+
+any gameboard of various sizes 
+
+gameboard will have a certain num rows props or state?
+num columns? props or state 
+
+gameboard will display test if the game is over? props or state?
+
+you want to minimize the stuff in state 
+
+if we think about what needs to change vs what doesnt 
+
+you are probably going to want numRows and Columns to be props 
+
+numrows and columns for a gameboard probably makes the most sense to be props because it is the least likely thing to change 
+
+inside of the component 
+
+
